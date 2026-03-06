@@ -23,6 +23,10 @@ export const authSlice = createSlice({
         setInit: (state) => {
             state.initAuth = true;
         },
+        logout: (state) => {
+            state.isAuth = false;
+            state.error = "";
+        },
     },
     extraReducers: (builder) => {
         builder
