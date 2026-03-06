@@ -9,10 +9,7 @@ export interface signInState {
 
 const initialState: AuthSchema = {
     isLoading: false,
-    initAuth: false,
     isAuth: false,
-    email: "",
-    password: "",
     error: "",
 }
 
@@ -20,9 +17,6 @@ export const authSlice = createSlice({
     name: "authorization",
     initialState,
     reducers: {
-        setInit: (state) => {
-            state.initAuth = true
-        },
         logout: (state) => {
             state.isAuth = false
             state.error = ""
@@ -31,7 +25,6 @@ export const authSlice = createSlice({
     extraReducers: (builder) => {
         builder
             .addCase(login.pending, (state) => {
-                state.initAuth = true
                 state.isLoading = true
                 state.error = ""
             })

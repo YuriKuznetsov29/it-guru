@@ -12,7 +12,7 @@ import "./index.css"
 const init = async () => {
     const token = localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken")
 
-    let initialState: DeepPartial<StateSchema> = {}
+    let initialState: StateSchema | undefined
 
     if (token) {
         try {
@@ -32,9 +32,17 @@ const init = async () => {
                     sessionStorage.setItem("accessToken", response.data.accessToken)
                     sessionStorage.setItem("refreshToken", response.data.refreshToken)
                 }
+
                 initialState = {
                     auth: {
+                        isLoading: false,
                         isAuth: true,
+                        error: "",
+                    },
+                    products: {
+                        isLoading: false,
+                        error: "",
+                        products: [],
                     },
                 }
             }
@@ -50,7 +58,7 @@ const init = async () => {
                     <App />
                 </BrowserRouter>
             </StoreProvider>
-        </StrictMode>,
+        </StrictMode>
     )
 }
 

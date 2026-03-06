@@ -1,8 +1,5 @@
 export interface AuthSchema {
-    isLoading: boolean;
-    initAuth: boolean;
-    isAuth: boolean;
-    email: string;
-    password: string;
-    error: string;
+    isLoading: boolean
+    isAuth: boolean
+    error: string
 }
