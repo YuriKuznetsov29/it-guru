@@ -1,43 +1,44 @@
-import React, { useEffect } from "react";
-import { LockOutlined, UserOutlined } from "@ant-design/icons";
-import { Alert, Button, Checkbox, Form, Input, Typography, type CheckboxChangeEvent } from "antd";
-import { useDispatch } from "react-redux";
-import type { AppDispatch } from "@/providers/store-provider/config/config";
-import { login } from "../model/services/login/login";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "@/shared/lib/hook/useAppSelector";
-import { getAuthStore } from "../model/selectors/get-auth-store";
-import { LogoIcon } from "./logo-icon";
+import React, { useEffect } from "react"
+import { LockOutlined, UserOutlined } from "@ant-design/icons"
+import { Alert, Button, Checkbox, Form, Input, Typography, type CheckboxChangeEvent } from "antd"
+import { useDispatch } from "react-redux"
+import type { AppDispatch } from "@/providers/store-provider/config/config"
+import { login } from "../model/services/login/login"
+import { useNavigate } from "react-router-dom"
+import { useAppSelector } from "@/shared/lib/hook/useAppSelector"
+import { getAuthStore } from "../model/selectors/get-auth-store"
+import { LogoIcon } from "../assets/logo-icon"
+import { AppRoutes, RoutePath } from "@/shared/config/route-config"
 
-const { Title, Text } = Typography;
+const { Title, Text } = Typography
 
 export const AuthForm: React.FC = () => {
-    const [saveAuth, setSaveAuth] = React.useState(false);
-    const dispatch = useDispatch<AppDispatch>();
-    const { isAuth, isLoading, error } = useAppSelector(getAuthStore);
-    const navigate = useNavigate();
+    const [saveAuth, setSaveAuth] = React.useState(false)
+    const dispatch = useDispatch<AppDispatch>()
+    const { isAuth, isLoading, error } = useAppSelector(getAuthStore)
+    const navigate = useNavigate()
 
     const onFinish = async (values: { username: string; password: string }) => {
-        dispatch(login({ username: values.username, password: values.password }));
-    };
+        dispatch(login({ username: values.username, password: values.password }))
+    }
 
     const onSaveAuthChange = (e: CheckboxChangeEvent) => {
-        setSaveAuth(e.target.checked);
-    };
+        setSaveAuth(e.target.checked)
+    }
 
     useEffect(() => {
         if (saveAuth) {
-            localStorage.setItem("saveAuth", "true");
+            localStorage.setItem("saveAuth", "true")
         } else {
-            localStorage.removeItem("saveAuth");
+            localStorage.removeItem("saveAuth")
         }
-    }, [saveAuth]);
+    }, [saveAuth])
 
     useEffect(() => {
         if (isAuth) {
-            navigate("/products");
+            navigate(RoutePath[AppRoutes.PRODUCTS])
         }
-    }, [isAuth]);
+    }, [isAuth])
 
     return (
         <div
@@ -76,13 +77,7 @@ export const AuthForm: React.FC = () => {
                     <Alert type="error" message={error} style={{ marginBottom: 24 }} showIcon />
                 )}
 
-                <Form
-                    name="login"
-                    initialValues={{ username: "test" }}
-                    onFinish={onFinish}
-                    layout="vertical"
-                    requiredMark={false}
-                >
+                <Form name="login" onFinish={onFinish} layout="vertical" requiredMark={false}>
                     <Form.Item
                         name="username"
                         label="Логин"
@@ -90,7 +85,7 @@ export const AuthForm: React.FC = () => {
                     >
                         <Input
                             prefix={<UserOutlined style={{ color: "#bfbfbf" }} />}
-                            placeholder="test"
+                            placeholder="Логин"
                             allowClear
                             size="large"
                         />
@@ -148,5 +143,5 @@ export const AuthForm: React.FC = () => {
                 </Form>
             </div>
         </div>
-    );
-};
+    )
+}

@@ -1,58 +1,57 @@
-import { StrictMode } from "react";
-import { createRoot } from "react-dom/client";
-import App from "./App.tsx";
-import { StoreProvider } from "./providers/store-provider/ui/store-provider.tsx";
-import type { StateSchema } from "./providers/store-provider/config/state-schema.ts";
-import $api from "./shared/api/api.ts";
-import type { AuthResponse } from "./modules/auth/index.ts";
-import { BrowserRouter } from "react-router";
-import type { PreloadedState } from "redux";
-import "antd/dist/reset.css";
-import "./index.css";
+import { StrictMode } from "react"
+import { createRoot } from "react-dom/client"
+import App from "./App.tsx"
+import { StoreProvider } from "./providers/store-provider/ui/store-provider.tsx"
+import type { StateSchema } from "./providers/store-provider/config/state-schema.ts"
+import $api from "./shared/api/api.ts"
+import type { AuthResponse } from "./modules/auth/index.ts"
+import { BrowserRouter } from "react-router"
+import "antd/dist/reset.css"
+import "./index.css"
 
 const init = async () => {
-    const token = localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken");
+    const token = localStorage.getItem("refreshToken") || sessionStorage.getItem("refreshToken")
 
-    let initialState: PreloadedState<StateSchema> = {};
+    let initialState: DeepPartial<StateSchema> = {}
 
     if (token) {
         try {
             const response = await $api.post<AuthResponse>(`/auth/refresh`, {
                 refreshToken: token,
-            });
+            })
 
-            const accessToken = response.data?.accessToken;
+            const accessToken = response.data?.accessToken
 
             if (accessToken) {
-                const saveAuth = localStorage.getItem("saveAuth");
+                const saveAuth = localStorage.getItem("saveAuth")
 
                 if (saveAuth === "true") {
-                    localStorage.setItem("accessToken", response.data.accessToken);
-                    localStorage.setItem("refreshToken", response.data.refreshToken);
+                    localStorage.setItem("accessToken", response.data.accessToken)
+                    localStorage.setItem("refreshToken", response.data.refreshToken)
                 } else {
-                    sessionStorage.setItem("accessToken", response.data.accessToken);
-                    sessionStorage.setItem("refreshToken", response.data.refreshToken);
+                    sessionStorage.setItem("accessToken", response.data.accessToken)
+                    sessionStorage.setItem("refreshToken", response.data.refreshToken)
                 }
                 initialState = {
                     auth: {
                         isAuth: true,
                     },
-                };
+                }
             }
         } catch (e) {
-            console.log(e);
+            console.log(e)
         }
     }
 
     createRoot(document.getElementById("root")!).render(
-        // <StrictMode>
-        // </StrictMode>
-        <StoreProvider initialState={initialState}>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-        </StoreProvider>
-    );
-};
+        <StrictMode>
+            <StoreProvider initialState={initialState}>
+                <BrowserRouter>
+                    <App />
+                </BrowserRouter>
+            </StoreProvider>
+        </StrictMode>,
+    )
+}
 
-init();
+init()

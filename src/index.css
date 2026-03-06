@@ -1,0 +1,28 @@
+body {
+    margin: 0;
+}
+
+.products-table .ant-table {
+    width: 100%;
+}
+
+@media (max-width: 768px) {
+    .products-table .ant-table-thead > tr > th,
+    .products-table .ant-table-tbody > tr > td {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+
+    /* Скрываем второстепенные колонки "Вендор" и "Артикул" на мобильных */
+    .products-table .ant-table-thead > tr > th:nth-child(2),
+    .products-table .ant-table-tbody > tr > td:nth-child(2),
+    .products-table .ant-table-thead > tr > th:nth-child(3),
+    .products-table .ant-table-tbody > tr > td:nth-child(3) {
+        display: none;
+    }
+
+    .products-table .ant-pagination {
+        padding: 8px 12px 12px;
+        text-align: center;
+    }
+}

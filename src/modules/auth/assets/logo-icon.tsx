@@ -5,4 +5,4 @@ export const LogoIcon = () => (
         <rect x="22" y="20" width="4" height="16" rx="1" fill="currentColor" />
         <rect x="30" y="12" width="4" height="24" rx="1" fill="currentColor" />
     </svg>
-);
+)

@@ -1,8 +1,8 @@
-import { Products } from "@/modules/products";
-import { AddProduct } from "@/modules/products/ui/add-products";
-import { SearchProducts } from "@/modules/products/ui/search-products";
-import { MainLayout } from "@/shared/ui/main-layout/main-layout";
-import { Card, Flex } from "antd";
+import { Products } from "@/modules/products"
+import { AddProduct } from "@/modules/products/ui/add-products"
+import { SearchProducts } from "@/modules/products/ui/search-products"
+import { MainLayout } from "@/shared/ui/main-layout/main-layout"
+import { Card, Flex } from "antd"
 
 export const ProductsPage = () => {
     return (
@@ -13,7 +13,6 @@ export const ProductsPage = () => {
                     bodyStyle={{ padding: "20px 24px 24px" }}
                     style={{
                         marginTop: 24,
-                        borderRadius: 8,
                         boxShadow: "0 2px 8px rgba(0, 0, 0, 0.08)",
                         backgroundColor: "#fff",
                     }}
@@ -23,5 +22,5 @@ export const ProductsPage = () => {
                 </Card>
             </Flex>
         </MainLayout>
-    );
-};
+    )
+}

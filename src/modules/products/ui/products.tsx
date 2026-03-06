@@ -1,34 +1,29 @@
-import React, { useEffect, useRef, useState } from "react";
-import { Alert, Button, Table } from "antd";
-import type { TableColumnsType, TableProps } from "antd";
-import { EllipsisOutlined, PlusOutlined } from "@ant-design/icons";
-import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch";
-import { getProducts } from "../model/services/get-products";
-import { useAppSelector } from "@/shared/lib/hook/useAppSelector";
-import { getProductsState } from "../model/selectors/get-products-state";
-import type { Product } from "../types/product";
-import LoadingBar, { type LoadingBarRef } from "react-top-loading-bar";
+import React, { useEffect, useRef, useState } from "react"
+import { Alert, Button, Table } from "antd"
+import type { TableColumnsType, TableProps } from "antd"
+import { EllipsisOutlined, PlusOutlined } from "@ant-design/icons"
+import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch"
+import { getProducts } from "../model/services/get-products"
+import { useAppSelector } from "@/shared/lib/hook/useAppSelector"
+import { getProductsState } from "../model/selectors/get-products-state"
+import type { Product } from "../types/product"
+import LoadingBar, { type LoadingBarRef } from "react-top-loading-bar"
+import { formatPrice } from "../helpers/helpers"
 
-type TableRowSelection<T extends object = object> = TableProps<T>["rowSelection"];
+type TableRowSelection<T extends object = object> = TableProps<T>["rowSelection"]
 
-function formatPrice(value: number): string {
-    const [intPart, decPart] = value.toFixed(2).split(".");
-    const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, " ");
-    return `${formattedInt}.${decPart}`;
-}
-
-const PAGE_SIZE = 20;
+const PAGE_SIZE = 20
 
 export const Products: React.FC = () => {
-    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-    const [activeRowKey, setActiveRowKey] = useState<React.Key | null>(null);
-    const [currentPage, setCurrentPage] = useState(1);
-    const loadingBar = useRef<LoadingBarRef | null>(null);
+    const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([])
+    const [activeRowKey, setActiveRowKey] = useState<React.Key | null>(null)
+    const [currentPage, setCurrentPage] = useState(1)
+    const loadingBar = useRef<LoadingBarRef | null>(null)
     const [sorter, setSorter] = useState<{
-        field?: string;
-        order?: "ascend" | "descend";
-    }>({});
-    const dispatch = useAppDispatch();
+        field?: string
+        order?: "ascend" | "descend"
+    }>({})
+    const dispatch = useAppDispatch()
 
     const columns: TableColumnsType<Product> = [
         {
@@ -94,7 +89,7 @@ export const Products: React.FC = () => {
             key: "rating",
             sorter: (a, b) => a.rating - b.rating,
             sortOrder: sorter.field === "rating" ? sorter.order : null,
-            render: (rating: number) => (
+            render: (rating: number = 0) => (
                 <span style={{ color: rating < 3 ? "#ff4d4f" : "inherit" }}>
                     {rating.toFixed(1)}/5
                 </span>
@@ -112,7 +107,7 @@ export const Products: React.FC = () => {
             title: "",
             key: "actions",
             width: 100,
-            render: (_, record) => (
+            render: () => (
                 <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
                     <Button
                         type="primary"
@@ -132,45 +127,45 @@ export const Products: React.FC = () => {
                 </div>
             ),
         },
-    ];
+    ]
 
-    const { products, error, isLoading } = useAppSelector(getProductsState);
+    const { products, error, isLoading } = useAppSelector(getProductsState)
 
     const paginatedProducts = React.useMemo(() => {
-        const start = (currentPage - 1) * PAGE_SIZE;
-        return products.slice(start, start + PAGE_SIZE);
-    }, [products, currentPage]);
+        const start = (currentPage - 1) * PAGE_SIZE
+        return products.slice(start, start + PAGE_SIZE)
+    }, [products, currentPage])
 
     useEffect(() => {
-        if (!loadingBar.current) return;
+        if (!loadingBar.current) return
         if (isLoading) {
-            loadingBar.current.continuousStart();
+            loadingBar.current.continuousStart()
         } else {
-            loadingBar.current.complete();
+            loadingBar.current.complete()
         }
-    }, [isLoading]);
+    }, [isLoading])
 
     useEffect(() => {
-        dispatch(getProducts());
-    }, [dispatch]);
+        dispatch(getProducts())
+    }, [dispatch])
 
     const onSelectChange = (newSelectedRowKeys: React.Key[]) => {
-        setSelectedRowKeys(newSelectedRowKeys);
-    };
+        setSelectedRowKeys(newSelectedRowKeys)
+    }
 
     const rowSelection: TableRowSelection<Product> = {
         selectedRowKeys,
         onChange: onSelectChange,
-    };
+    }
 
     const handleTableChange: TableProps<Product>["onChange"] = (_, __, sorterObj) => {
         if (!Array.isArray(sorterObj)) {
             setSorter({
                 field: sorterObj.field as string,
                 order: sorterObj.order ?? undefined,
-            });
+            })
         }
-    };
+    }
 
     return (
         <>
@@ -181,6 +176,8 @@ export const Products: React.FC = () => {
                 rowSelection={rowSelection}
                 columns={columns}
                 dataSource={paginatedProducts}
+                size="middle"
+                scroll={{ x: 800 }}
                 onRow={(record) => ({
                     onClick: () => setActiveRowKey(record.id),
                     style: {
@@ -202,5 +199,5 @@ export const Products: React.FC = () => {
                 className="products-table"
             />
         </>
-    );
-};
+    )
+}

@@ -1,23 +1,23 @@
-import { addProduct } from "@/modules/products/model/services/add-product";
-import { getProducts } from "@/modules/products/model/services/get-products";
-import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch";
-import { useAppSelector } from "@/shared/lib/hook/useAppSelector";
-import { PlusOutlined, ReloadOutlined } from "@ant-design/icons";
-import { Button, Flex, Form, Input, InputNumber, Modal, Typography, message } from "antd";
-import { useState } from "react";
-import { getProductsState } from "../model/selectors/get-products-state";
+import { addProduct } from "@/modules/products/model/services/add-product"
+import { getProducts } from "@/modules/products/model/services/get-products"
+import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch"
+import { useAppSelector } from "@/shared/lib/hook/useAppSelector"
+import { PlusOutlined, ReloadOutlined } from "@ant-design/icons"
+import { Button, Flex, Form, Input, InputNumber, Modal, Typography, message } from "antd"
+import { useState } from "react"
+import { getProductsState } from "../model/selectors/get-products-state"
 
-const { Text } = Typography;
+const { Text } = Typography
 
 export const AddProduct = () => {
-    const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-    const [form] = Form.useForm();
-    const dispatch = useAppDispatch();
-    const { isLoading } = useAppSelector(getProductsState);
+    const [isAddModalOpen, setIsAddModalOpen] = useState(false)
+    const [form] = Form.useForm()
+    const dispatch = useAppDispatch()
+    const { isLoading } = useAppSelector(getProductsState)
 
     const handleAddSubmit = async () => {
         try {
-            const values = await form.validateFields();
+            const values = await form.validateFields()
             await dispatch(
                 addProduct({
                     title: values.title,
@@ -25,20 +25,20 @@ export const AddProduct = () => {
                     brand: values.brand,
                     sku: values.sku,
                 }),
-            ).unwrap();
-            message.success("Товар успешно добавлен");
-            setIsAddModalOpen(false);
-            form.resetFields();
+            ).unwrap()
+            message.success("Товар успешно добавлен")
+            setIsAddModalOpen(false)
+            form.resetFields()
         } catch (err) {
             if (typeof err === "string") {
-                message.error(err);
+                message.error(err)
             }
         }
-    };
+    }
 
     const handleRefresh = () => {
-        dispatch(getProducts());
-    };
+        dispatch(getProducts())
+    }
 
     return (
         <>
@@ -112,5 +112,5 @@ export const AddProduct = () => {
                 </Form>
             </Modal>
         </>
-    );
-};
+    )
+}

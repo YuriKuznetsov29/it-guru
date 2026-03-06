@@ -1,8 +1,8 @@
-import { Flex } from "antd";
-import type { ReactNode } from "react";
+import { Flex } from "antd"
+import type { ReactNode } from "react"
 
 interface MainLayoutProps {
-    children: ReactNode;
+    children: ReactNode
 }
 
 export const MainLayout = ({ children }: MainLayoutProps) => {
@@ -12,12 +12,12 @@ export const MainLayout = ({ children }: MainLayoutProps) => {
                 style={{
                     width: "100%",
                     margin: "0 auto",
-                    padding: "24px 32px",
+                    padding: "24px 0px",
                     flex: 1,
                 }}
             >
                 {children}
             </div>
         </Flex>
-    );
-};
+    )
+}

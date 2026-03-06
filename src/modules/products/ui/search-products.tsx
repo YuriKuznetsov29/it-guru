@@ -1,28 +1,32 @@
-import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch";
-import { Input, Typography } from "antd";
-import { useEffect, useState } from "react";
-import { getProducts } from "../model/services/get-products";
-import { searchProducts } from "../model/services/search-products";
-import { SearchOutlined } from "@ant-design/icons";
-import { LogoutButton } from "@/shared/ui/logout-button/logout-button";
+import { useAppDispatch } from "@/shared/lib/hook/useAppDispatch"
+import { Input, Typography } from "antd"
+import { useEffect, useState } from "react"
+import { getProducts } from "../model/services/get-products"
+import { searchProducts } from "../model/services/search-products"
+import { SearchOutlined } from "@ant-design/icons"
+import { LogoutButton } from "@/shared/ui/logout-button/logout-button"
+import { useDebounce } from "@/shared/lib/hook/useDebounce"
 
-const { Title } = Typography;
+const { Title } = Typography
 
 export const SearchProducts = () => {
-    const [query, setQuery] = useState("");
-    const dispatch = useAppDispatch();
+    const [query, setQuery] = useState("")
+    const dispatch = useAppDispatch()
+
+    const handleSearch = () => {
+        const trimmed = query.trim()
+        if (!trimmed) {
+            dispatch(getProducts())
+            return
+        }
+        dispatch(searchProducts(trimmed))
+    }
+
+    const handleSearchDebounced = useDebounce(handleSearch, 300)
 
     useEffect(() => {
-        const handle = setTimeout(() => {
-            const trimmed = query.trim();
-            if (!trimmed) {
-                dispatch(getProducts());
-                return;
-            }
-            dispatch(searchProducts(trimmed));
-        }, 350);
-        return () => clearTimeout(handle);
-    }, [query, dispatch]);
+        handleSearchDebounced()
+    }, [query, dispatch])
 
     return (
         <div
@@ -72,5 +76,5 @@ export const SearchProducts = () => {
             </div>
             <LogoutButton />
         </div>
-    );
-};
+    )
+}
